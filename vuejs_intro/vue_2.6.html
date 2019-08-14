@@ -1,0 +1,27 @@
+<script src=https://unpkg.com/vue@2.5.17></script>
+
+<button id=b-button v-bind:title=loggedInButton>buy</button>
+
+<script>
+  // hover message is data.loggedInButton
+  var vm = new Vue({
+    el: '#b-button',
+    data: {
+      loggedInButton: 'you can buy'
+    }
+  });
+</script>
+
+
+<button id=b-button2 v-bind:disabled=!canBuy v-bind:title=titleMessage>buy2</button>
+
+<script>
+  var vm2 = new Vue({
+    el: '#b-button2',
+    data: {
+      titleMessage: 'buy2',
+      //canBuy: true
+      canBuy: false
+    }
+  });
+</script>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<title>hello vue.js</title> 
+<script src=https://unpkg.com/vue@2.5.17></script>
+
+<div id=app>
+  <p>
+    {{ message }}
+  </p>
+</div>
+
+<script>
+  console.assert(typeof Vue !== "undefined" );
+  var vm = new Vue({
+    //el: "#app",
+    data: { message: 'hello, world'}
+  });
+  // it also works fine.
+  vm.$mount('#app');
+</script>

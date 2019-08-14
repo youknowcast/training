@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<title>hello vue.js</title> 
+<script src=https://unpkg.com/vue@2.5.17></script>
+
+<div id=app>
+  <p>
+    {{ items[0].name }}: {{ items[0].price }} x {{ items[0].quantity }}
+  </p>
+</div>
+
+<script>
+  var items = [
+    { name: 'pensil', price: 300, quantity: 0 },
+    { name: 'note', price: 400, quantity: 0 },
+    { name: 'rubber', price: 500, quantity: 0 },
+  ];
+
+  console.assert(typeof Vue !== "undefined" );
+  var vm = new Vue({
+    el: "#app",
+    data: { 
+      items: items
+    }
+  });
+  // you can see Observers that Vue provides.
+  console.log(vm.items);
+  // then check $watch method works to find changing of properties.
+  // plz execute `vm.items[0].quantity = 1` on your browser console. callback should be done.
+  //   FYI. $watch(Observe, callback)
+  vm.$watch(function() {
+    return this.items[0].quantity;
+  }, function(quantity) {
+    console.log(quantity);
+  });
+</script>
