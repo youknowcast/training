@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<title>hello vue.js</title> 
+<script src=https://unpkg.com/vue@2.5.17></script>
+
+<div id=app>
+  <!-- include 2.9 -->
+  <!-- 
+    v-bind は :class と省略しても書ける
+  -->
+  <div :class=errorMessageStyle :style=errorMessageStyle>
+  <!--  <div v-show=!canBuy v-bind:style="errorMessageStyle" v-bind:class="errorMessageClass"> -->
+  
+    <ul>
+      <li v-for="item in items" v-bind:key="item.name">
+        <!-- 2.9.4 入力のたびの反映は input, focusout 時の反映は change. また @ が v-on の省略記法 -->
+        <!-- {{ item.name }} count: <input type=number @change="item.quantity = $event.target.value" v-bind:value=item.quantity min=0 /> -->
+        <!-- {{ item.name }} count: <input type=number v-on:change="item.quantity = $event.target.value" v-bind:value=item.quantity min=0 /> -->
+        <!-- {{ item.name }} count: <input type=number v-on:input="item.quantity = $event.target.value" v-bind:value=item.quantity min=0 /> -->
+
+        <!-- form 入力 binding の仕組みとしては v-model を使うことが出来る(v-on の包括的な代替) -->
+        <!-- v-model は v-on:input と同等の動作 -->
+        <!-- {{ item.name }} count: <input type=number v-model=item.quantity min=0 /> -->
+        <!-- v-on:change と同等にするには v-model.lazyを用いる -->
+        {{ item.name }} count: <input type=number v-model.lazy=item.quantity min=0 />
+      </li>
+    </ul>
+    <hr />
+    <ul>
+      <li v-for="item in items" v-bind:key="item.name">
+        {{ item.name }}: {{ item.price }} x {{ item.quantity }} = {{ item.price * item.quantity | numberWithDelimiter }}\
+      </li>
+    </ul>
+    <p>subtotal: {{ totalPrice | numberWithDelimiter }}\</p>
+    <p>total(with tax): {{ totalPriceWithTax | numberWithDelimiter }}\</p>
+    <p v-show=!canBuy>
+     {{ 1000 | numberWithDelimiter }}\ 以上からご購入いただけます
+    </p>
+  </div>
+</div>
+
+<script>
+  var items = [
+    { name: 'pensil', price: 300, quantity: 0 },
+    { name: 'note', price: 400, quantity: 0 },
+    { name: 'rubber', price: 500, quantity: 0 },
+  ];
+
+  console.assert(typeof Vue !== "undefined" );
+  var vm = new Vue({
+    el: "#app",
+    data: { 
+      items: items
+    },
+    filters: {
+      // filter sample
+      numberWithDelimiter: function(value) {
+        if (!value) {
+          return '0';
+        }
+        return value.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+      }
+    },
+    computed: {
+      totalPrice: function() {
+        return this.items.reduce(function(sum, item) {
+          return sum + (item.price * item.quantity);
+        }, 0);
+      },
+      totalPriceWithTax: function() {
+        return Math.floor(this.totalPrice * 1.08);
+      },
+      canBuy: function() {
+        return this.totalPrice >= 1000
+      },
+      errorMessageClass: function() {
+        return {
+          error: !this.canBuy
+        };
+      },
+      // v-bind, v-style 等は中身が複雑になるようなら(複数class 入り組んだ style), computed に移行を検討すべき
+      errorMessageStyle: function() {
+        return {
+          border: this.canBuy ? '' : '1px solid red',
+          color: this.canBuy ? '' : 'red'
+        }
+      }
+    }
+  });
+  window.vm = vm;
+</script>

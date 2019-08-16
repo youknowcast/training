@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<title>Vue.js with hook</title>
+<script src=https://unpkg.com/vue@2.5.17></script>
+
+<div id=app>
+  <p> {{ count }} </p>
+</div>
+
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: function() {
+      return {
+        count: 0,
+        timerId: null
+      }
+    },
+    beforeCreated: function() {
+      console.log('beforeCreated');
+    },
+    created: function() {
+      console.log('created');
+      var that = this;
+      console.log(this.count);
+      console.log('ok, count is 0');
+      console.log(this.$el);
+      console.log('should be undefined');
+      this.timerId = setInterval(function() {
+        that.count += 1;
+      }, 1000);
+    },
+    beforeMount: function() {
+      console.log('beforeMount');
+    },
+    mounted: function() {
+      console.log('mounted');
+      console.log(this.$el);
+      console.log('should be DOM element');
+    },
+    beforeUpdate: function() {
+      console.log('beforeUpdate');
+    },
+    updated: function() {
+      console.log('updated');
+    },
+    beforeDestroy: function() {
+      console.log('beforeDestroy');
+      clearInterval(this.timerId);
+    },
+    destroyed: function() {
+      console.log('destroyed');
+    }
+  });
+</script>
