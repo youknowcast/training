@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<title>Vue.js's component</title>
+
+<script src=https://unpkg.com/vue@2.5.17></script>
+
+<div id=main>
+  <ul>
+    <!-- web components との互換性を考えると，componennt の命名は kebab ケース(- 区切)が望ましいといえる -->
+    <list-item></list-item>
+  </ul>
+
+  <fruit-list></fruit-list>
+
+  <input-date-with-today></input-date-with-today>
+</div>
+
+<script type='text/x-templaete' id=fruit-list-title>
+<h1>fruit list</h1>
+</script>
+
+<script>
+  // Vue.component(TagName, options)
+  //   options includes:
+  //     data
+  //     filters
+  //     methods
+  //     computed
+  //     template
+  //     props
+  //     created
+  //     (..etc)
+  Vue.component('list-item', {
+    template: '<li>foo {{ contents }}</li>',
+    data: function() {
+      return {
+        contents: 'bar'
+      }
+    }
+  });
+
+  Vue.component('input-date-with-today', {
+    // not equal document.createElement.
+    // see https://jp.vuejs.org/v2/guide/render-function.html#createElement-引数
+    render: function(createElement) {
+      return createElement(
+        'input',
+        {
+          attrs: {
+            type: 'date',
+            value: new Date().toISOString().substring(0, 10)
+          }
+        }
+      );
+    }
+  });
+
+  Vue.component('fruit-list', {
+    template: `
+      <div>
+        <fruit-list-title></fruit-list-title>
+        <fruit-list-description></fruit-list-description>
+        <fruit-list-table></fruit-list-table>
+      </div>
+    `
+  })
+
+  Vue.component('fruit-list-title', {
+    // 3.2.4. use text/x-template style.
+    template: '#fruit-list-title'
+  })
+
+  Vue.component('fruit-list-description', {
+    template: '<p>季節の代表的なフルーツの一覧です</p>'
+  })
+
+  Vue.component('fruit-list-table', {
+    template: `
+      <table>
+        <tr>
+          <th>season</th>
+          <th>fruit</th>
+        </tr>
+        <tr v-for="item in items" >
+          <td> {{ item.season }} </td>
+          <td> {{ item.fruit }} </td>
+        </tr>
+      </table>
+    `,
+    data: function() {
+      return {
+        items: [
+          { season: 'spring', fruit: 'strawberry'},
+          { season: 'summer', fruit: 'water melon'},
+          { season: 'fall', fruit: 'grape'},
+          { season: 'winter', fruit: 'orange?'},
+        ]
+      }
+    }
+  })
+
+
+  new Vue({ el: '#main' });
+</script>
