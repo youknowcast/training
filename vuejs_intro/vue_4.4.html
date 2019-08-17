@@ -34,6 +34,14 @@
   </div>
 </script>
 
+<script type=text/x-template id=user>
+  <div class=user>
+    <h2>User id is {{ $route.params.userId }}</h2>
+    <router-link :to="'/user/' + $route.params.userId + '/profile'">user profile</router-link>
+    <router-link :to="'/user/' + $route.params.userId + '/posts'">user profile</router-link>
+    <router-view></router-view>
+  </div>
+</script>
 
 <script type=text/x-template id=user-list>
   <div>
@@ -142,6 +150,26 @@
         }).bind(this))
       }
     }
+  }
+
+  var User = {
+    template: '#user'
+  }
+
+  var UserProfile = {
+    template: `
+      <div class=user-profile>
+        <h3>here, this is user {{ $route.params.userId }} 's profile page</h3>
+      </div>
+    `
+  }
+
+  var UserPosts = {
+    template: `
+      <div class=user-posts>
+        <h3>here, this is user {{ $route.params.userId }} 's posts page</h3>
+      </div>
+    `
   }
 
   var getUsers = function(callback) {
@@ -276,6 +304,21 @@
         component: {
           template: '<div>here is top page</div>'
         }
+      },
+      {
+        path: '/user/:userId',
+        name: 'user',
+        component: User,
+        children: [
+          {
+            path: 'profile',
+            component: UserProfile
+          },
+          {
+            path: 'posts',
+            component: UserPosts
+          }
+        ]
       },
       {
         path: '/users',

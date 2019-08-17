@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<script src="https://unpkg.com/vue@2.5.17"></script>
+
+
+<div id=fruits-list>
+  <page-header class=header>
+    <h1 slot=header>夏の風物詩</h1>
+  </page-header>
+  <page-content class=content>
+    <ul slot=content>
+      <li>water melon</li>
+      <li>mango</li>
+    </ul>
+  </page-content>
+  <user-login></user-login>
+</div>
+
+  <style type=text/css>
+    .header h1 {
+      width: 100%;
+      height: 30px;
+      background-color: #f1f1f1;
+      border: 1px solid #d3d3d3;
+      padding: 30px 15px;
+    }
+
+    .content li {
+      width: 100%;
+      height: 30px;
+      padding: 30px 15px;
+      background-color: #f1f1f1;
+      border: 1px solid #d3d3d3;
+      text-align: left;
+    }
+  </style>
+
+  <script type=text/x-template id=login-template>
+    <div id=login-template>
+      <div>
+        <input type=text placeholder='login id' v-model=userId />
+      </div>
+      <div>
+        <input type=password placeholder='password' v-model=password />
+      </div>
+      <button @click=login>login</button>
+    </div>
+  </script>
+
+  <script>
+    var headerTemplate = `
+      <div style='color: grey'>
+        <slot name=header>親からなにも渡ってこない場合この文が表示されます</slot>
+      </div>
+    `;
+    var contentTemplate = `
+      <div>
+        <slot name=content>No content</slot>
+      </div>
+    `;
+    var auth = {
+      login: function(id, pass) {
+        window.alert('usedId' + id + "\n" + "password: " + pass);
+      }
+    }
+
+    Vue.component('page-header', {
+      template: headerTemplate
+    });
+
+    Vue.component('page-content', {
+      template: contentTemplate
+    });
+
+    Vue.component('user-login', {
+      template: '#login-template',
+      data: function() {
+        return {
+          userId: '',
+          password: ''
+        };
+      },
+      methods: {
+        login: function() {
+          auth.login(this.userId, this.password);
+        }
+      }
+    });
+
+    new Vue({
+      el: '#fruits-list',
+    });
+  </script>

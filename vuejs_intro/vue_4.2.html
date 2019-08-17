@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src=https://unpkg.com/vue@2.5.17></script>
+    <script src=https://unpkg.com/vue-router@3.0.1></script>
+
+    <title>with Vue-router</title>
+  </head>
+
+  <body>
+    <div id=app>
+      <router-link to="/top">top page</router-link>
+      <router-link to="/about">about page</router-link>
+      <router-link to="/users">user list page</router-link>
+      <router-link :to="{name: 'user-with-id', params: {userId: 123}}">user info page</router-link>
+      <router-view></router-view>
+    </div>
+
+    <script>
+      var router = new VueRouter({
+        routes: [
+          {
+            path: '/top',
+            component: {
+              template: '<div>top page</div>'
+            }
+          },
+          {
+            path: '/about',
+            name: 'about',
+            component: {
+              template: '<div>about page</div>'
+            }
+          },
+          {
+            path: '/users',
+            component: {
+              template: '<div>user list page.</div>'
+            }
+          },
+          {
+            path: '/users/:userId',
+            name: 'user-with-id',
+            component: {
+              template: '<div>user id is {{ $route.params.userId }}</div>'
+            }
+          }
+        ]
+      });
+
+      var app = new Vue({
+        router: router
+      }).$mount('#app');
+
+      // move to default page(about)
+      router.push({ name: 'about' });
+    </script>
+  </body>
+</html>
