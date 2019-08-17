@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<title>Vue.js slot</title>
+<script src=https://unpkg.com/vue@2.5.17></script>
+
+<div id=app>
+  <!-- has content -->
+  <my-button>send</my-button>
+  <!-- has no content -->
+  <my-button></my-button>
+</div>
+
+<script>
+  var MyButton = {
+    template: `
+      <button>
+        <slot>ok</slot>
+      </button>
+    `
+  }
+
+  new Vue({
+    el: '#app',
+    components: {
+      MyButton: MyButton
+    }
+  });
+</script>
