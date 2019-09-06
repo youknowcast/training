@@ -14,6 +14,7 @@ defmodule Issues.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      applications: [:httpoison],
       extra_applications: [:logger]
     ]
   end
@@ -23,6 +24,8 @@ defmodule Issues.MixProject do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      { :httpoison, "~> 1.5.1" },
+      { :poison, "~> 4.0.1" }
     ]
   end
 end
