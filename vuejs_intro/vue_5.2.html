@@ -20,6 +20,12 @@
     </p>
     <p slot="footer">This is footer</p>
   </my-page>
+
+  <todo-list :todos="todos">
+    <li slot-scope="slotProps" v-if="slotProps.todo.isCompleted">
+      {{ slotProps.todo.text }}
+    </li>
+  </todo-list>
 </div>
 
 <script>
@@ -47,11 +53,44 @@
     `
   }
 
+  var TodoList = {
+    props: {
+      todos: {
+        type: Array,
+        required: true
+      }
+    },
+    template: `
+      <ul>
+        <template v-for="todo in todos">
+          <slot :todo="todo">
+            <li :key="todo.id">
+              {{ todo.text }}
+            </li>
+          </slot>
+        </template>
+      </ul>
+    `
+  }
+
   new Vue({
     el: '#app',
+    data: function() {
+      return {
+        todos: [
+          { id: 1, text: "C++", isCompleted: true },
+          { id: 2, text: "javascript", isCompleted: false},
+          { id: 3, text: "C#", isCompleted: true },
+          { id: 4, text: "Java", isCompleted: true },
+          { id: 5, text: "Erlang", isCompleted: false },
+          { id: 6, text: "Elixir", isCompleted: true },
+        ]
+      }
+    },
     components: {
       MyButton: MyButton,
-      MyPage: MyPage
+      MyPage: MyPage,
+      TodoList: TodoList
     }
   });
 </script>
