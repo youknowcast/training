@@ -19,19 +19,13 @@
      }
   </style>
   <h1>Test</h1>
-  <div class=container>
-      <canvas id=canvas1 name=canvas class=default_canvas>
-         Your browser does not support HTML5.
-      </canvas>
-      <canvas name=canvas class=default_canvas></canvas>
+  <div class=container id=container>
   </div> 
 
   <script>
     window.addEventListener('load', app, false);
 
     function app() {
-      const canvases = document.getElementsByName('canvas');
-    
       const callbacks = [
           // 2-1
           (theCanvas) => {
@@ -60,9 +54,22 @@
                 context.strokeRect(0,0,60,60);
                 context.clearRect(20,20,20,20);
             }
+          },
+          // 2-3
+          (theCanvas) => {
+
           }
       ]
 
+      const container = document.getElementById('container');
+      const canvases = [];
+      callbacks.forEach((_, idx) => {
+          const el = document.createElement('canvas');
+          el.name = `canvas${idx}`;
+          el.className = 'default_canvas';
+          canvases.push(el);
+          container.appendChild(el);
+      })
       canvases.forEach((theCanvas, idx) => {
         callbacks[idx].call(null, theCanvas)
       });
