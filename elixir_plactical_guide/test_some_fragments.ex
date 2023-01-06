@@ -167,7 +167,32 @@ defmodule TestMacro do
       {a, b}
     end
     assert(val2 == [{0, 4}, {0, 5}, {1, 5}, {2, 5}, {3, 5}])
+  end
 
+  test "with" do
+    sample = "value=9999"
+    pseudo_file_result_ok = {:ok, sample}
+
+    val = with {:ok, data} <- pseudo_file_result_ok,
+         "value=" <> value <- data,
+         value = String.trim(value),
+         {n, _} <- Integer.parse(value) do
+      n
+    else
+      _ -> nil
+    end
+    assert(val == 9999)
+
+    pseudo_file_result_ng = {:ng, sample}
+    val2 = with {:ok, data} <- pseudo_file_result_ng,
+         "value=" <> value <- data,
+         value = String.trim(value),
+         {n, _} <- Integer.parse(value) do
+      n
+    else
+      _ -> nil
+    end
+    assert(val2 == nil)
   end
 end
 
