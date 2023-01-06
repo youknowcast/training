@@ -1,4 +1,4 @@
-ExUnit.start()
+ExUnit.start(exclude: :not_implemented)
 
 defmodule TestBoolean do
   use ExUnit.Case
@@ -193,6 +193,23 @@ defmodule TestMacro do
       _ -> nil
     end
     assert(val2 == nil)
+  end
+end
+
+defmodule TestExUnit.Sample do
+  def double(enumerable) do
+    Enum.map(enumerable, fn n -> n * 2 end)
+  end
+end
+
+defmodule TestExUnit do
+  use ExUnit.Case
+
+  test "skip test has no block"
+
+  test "q.23-3-1" do
+    assert(TestExUnit.Sample.double([1, 2, 3]) == [2, 4, 6])
+    assert(TestExUnit.Sample.double(1..3) == [2, 4, 6])
   end
 end
 
