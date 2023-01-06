@@ -98,7 +98,77 @@ defmodule TestList do
   test "non-ascii" do
     assert([60, 1, 90] == [60, 1, 90])
   end
+
+  test "sort" do
+    list1 = [3, 5, -1, 0, 7]
+    list2 = ["bob", "eve", "carol", "alice", "david"]
+    list3 = ["1", "10", "2", "1000", "3", "-1"]
+
+    assert(Enum.sort(list1) == [-1, 0, 3, 5, 7])
+    assert(Enum.sort(list1, :desc) == Enum.reverse([-1, 0, 3, 5, 7]))
+    assert(Enum.sort(list2) == ["alice", "bob", "carol", "david", "eve"])
+    assert(Enum.sort(list2, :desc) == Enum.reverse(["alice", "bob", "carol", "david", "eve"]))
+
+    assert(Enum.sort(list3) == ["-1", "1", "10", "1000", "2", "3"])
+    assert(Enum.sort(list3, fn a, b -> String.to_integer(a) <= String.to_integer(b) end) == ["-1", "1", "2", "3", "10", "1000"])
+  end
+
+  test "Enum.random" do
+    list = [3, 5, 6, 9]
+    assert(Enum.random(list) in list)
+    assert_raise(Enum.EmptyError, fn -> Enum.random([]) end)
+  end
+
+  test "one?" do
+    one? = fn list -> Enum.reduce(list, false, fn v, acc -> v || acc end) end
+    assert(one?.([false, false, true, false]) == true)
+    assert(one?.([false, false, false, false]) == false)
+    assert(one?.([]) == false)
+  end
+
+  test "q.17-7-1" do
+    result = 
+      [-1, 1, 1, -2, 0, 4, 3, 1, 0, 3]
+      |> Enum.filter(fn n -> n >= 1 end)
+      |> Enum.uniq()
+      |> Enum.sort(:desc)
+    assert(result == [4, 3, 1])
+  end
+
+  test "q.17-7-2" do
+    triple_each = fn list -> Enum.map(list, fn n -> n * 3 end) end
+    assert(triple_each.([1, 5, -2, 0, 17]) == [3, 15, -6, 0, 51])
+  end
 end
 
+defmodule TestMacro do
+  use ExUnit.Case
+
+  test "generator" do
+    val = for n <- 1..10 do
+      n - 1
+    end
+    assert(val == Enum.to_list(0..9))
+
+    # with `filter`
+    val2 = for n <- 0..10, rem(n, 3) == 0 do
+      n - 1
+    end
+    assert(val2 == [-1, 2, 5, 8])
+  end
+
+  test "multi generator" do
+    val = for a <- 0..3, b <- 4..5 do
+      {a, b}
+    end
+    assert(val == [{0, 4}, {0, 5}, {1, 4}, {1, 5}, {2, 4}, {2, 5}, {3, 4}, {3, 5}])
+
+    val2 = for a <- 0..3, b <- 4..5, rem(a * b, 5) == 0 do
+      {a, b}
+    end
+    assert(val2 == [{0, 4}, {0, 5}, {1, 5}, {2, 5}, {3, 5}])
+
+  end
+end
 
 
