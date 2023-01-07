@@ -5,6 +5,10 @@ defmodule StringBuffer do
     Agent.start_link(fn -> initial_state end, name: __MODULE__)
   end
 
+  def reset() do
+    Agent.update(__MODULE__, fn _ -> "" end)
+  end
+
   def append(str) do
     Agent.update(__MODULE__, fn state -> state <> str end)
   end
@@ -48,9 +52,17 @@ defmodule TestStringBuffer do
     assert(get_value() == "hogehuga")
   end
 
-  test "multi run start_link" do
+  test "multi run start_link occurs error" do
     {:error, {:already_started, pid}} = start_link("aa")
     assert(is_pid(pid))
+  end
+
+  test "reset" do
+    append("aa")
+    assert(get_value() == "aa")
+
+    reset()
+    assert(get_value() == "")
   end
 end
 
