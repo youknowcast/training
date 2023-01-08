@@ -9,6 +9,13 @@ defmodule Sequence.ServerTest do
     assert(GenServer.call(pid, :next_number) == 2)
   end
 
+  test "process name" do
+    {:ok, pid} = GenServer.start_link(Sequence.Server, 1, name: :seq)
+
+    assert(GenServer.call(pid, :next_number) == 1)
+    assert(GenServer.call(:seq, :next_number) == 2)
+  end
+
   describe ":set_number" do
     test "works" do
       {:ok, pid} = GenServer.start_link(Sequence.Server, 1)
