@@ -28,6 +28,7 @@ defmodule Sequence.Server do
   def handle_call({:set_number, new_number}, _, _) when is_number(new_number) do
     {:reply, new_number, new_number}
   end
+
   def handle_call({:set_number, _}, _, current_number) do
     {:reply, :invalid_number, current_number}
   end
@@ -35,6 +36,7 @@ defmodule Sequence.Server do
   def handle_cast({:increment_number, delta}, current_number) when is_number(delta) do
     {:noreply, current_number + delta}
   end
+
   def handle_cast({:increment_number, _}, current_number) do
     {:noreply, current_number}
   end
