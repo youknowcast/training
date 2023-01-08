@@ -8,4 +8,11 @@ defmodule Sequence.Server do
   def handle_call(:next_number, _from, current_number) do
     {:reply, current_number, current_number + 1}
   end
+
+  def handle_call({:set_number, new_number}, _, _) when is_number(new_number) do
+    {:reply, new_number, new_number}
+  end
+  def handle_call({:set_number, _}, _, _) do
+    {:reply, :invalid_number, :invalid_number}
+  end
 end
