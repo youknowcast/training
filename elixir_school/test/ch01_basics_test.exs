@@ -29,4 +29,8 @@ defmodule Ch01BasicsTest do
     # not declared module also be atom
     assert(is_atom(Bar) == true)
   end
+
+  test "string" do
+    assert(String.to_charlist("HELLO") == [72, 69, 76, 76,79])
+  end
 end
