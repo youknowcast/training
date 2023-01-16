@@ -1,7 +1,6 @@
 defmodule Ch02FunctionTest do
   use ExUnit.Case
 
-
   defp phrase("en"), do: "hello"
   defp phrase("es"), do: "hola"
   defp phrase("ja"), do: "こんにちは"
